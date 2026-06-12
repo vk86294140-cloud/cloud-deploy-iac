@@ -1,0 +1,12 @@
+# Copy to terraform.tfvars and adjust.
+aws_region    = "us-east-1"
+project_name  = "cloud-deploy-iac"
+desired_count = 2
+cpu           = 256
+memory        = 512
+
+# Optional: get email alerts when an alarm fires (confirm the SNS subscription).
+# alarm_email = "you@example.com"
+
+# Leave container_image empty to deploy the ECR repo's :latest tag (pushed by CI).
+# container_image = ""
