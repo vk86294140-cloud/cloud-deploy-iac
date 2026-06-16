@@ -26,6 +26,7 @@ and deployed by **GitHub Actions** using **OIDC** (no long-lived AWS keys).
 | --- | --- |
 | Container registry | ECR repo with scan-on-push + lifecycle policy (keep last 10) |
 | Compute | ECS Fargate cluster + service (configurable task count/CPU/memory) |
+| Autoscaling | Application Auto Scaling target + 2 target-tracking policies (CPU, ALB requests/task) |
 | Networking | ALB + target group + listener; least-privilege security groups |
 | IAM | Task execution role (ECR pull + log write) |
 | Observability | CloudWatch log group, 3 alarms (CPU, unhealthy hosts, 5xx), dashboard, SNS topic |
@@ -40,6 +41,10 @@ container that listens on a port and exposes a health endpoint.
 - **Immutable, traceable deploys.** Every image is tagged with the git SHA;
   `/health` echoes the deployed commit. ECS rolls forward via a new task
   revision and waits for `services-stable`.
+- **Scales with load.** Application Auto Scaling holds the service between
+  `min_capacity` and `max_capacity`, scaling on whichever bites first — average
+  CPU or ALB requests-per-task. Terraform seeds the initial count and then gets
+  out of the way (`ignore_changes = [desired_count]`).
 - **Cost-aware by default.** Uses the default VPC (no NAT-gateway bill) and a
   one-command `make destroy`. Estimated demo cost ≈ **$20-30/mo** (ALB + 2 small
   Fargate tasks); **$0** when destroyed.

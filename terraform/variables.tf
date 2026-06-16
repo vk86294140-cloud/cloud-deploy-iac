@@ -23,9 +23,33 @@ variable "container_port" {
 }
 
 variable "desired_count" {
-  description = "Number of Fargate tasks to run."
+  description = "Initial number of Fargate tasks to run (autoscaling drives it after start)."
   type        = number
   default     = 2
+}
+
+variable "min_capacity" {
+  description = "Minimum Fargate task count Application Auto Scaling will hold."
+  type        = number
+  default     = 2
+}
+
+variable "max_capacity" {
+  description = "Maximum Fargate task count Application Auto Scaling may scale out to."
+  type        = number
+  default     = 6
+}
+
+variable "cpu_target_utilization" {
+  description = "Target average ECS CPU percent for the scaling policy."
+  type        = number
+  default     = 70
+}
+
+variable "requests_per_target" {
+  description = "Target ALB requests-per-task for the request-based scaling policy."
+  type        = number
+  default     = 1000
 }
 
 variable "cpu" {

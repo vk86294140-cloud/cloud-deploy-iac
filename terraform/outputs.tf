@@ -16,6 +16,11 @@ output "ecs_service_name" {
   value = aws_ecs_service.app.name
 }
 
+output "autoscaling_capacity" {
+  description = "Task-count bounds Application Auto Scaling holds the service within."
+  value       = "${var.min_capacity}..${var.max_capacity} tasks"
+}
+
 output "dashboard_url" {
   description = "CloudWatch dashboard."
   value       = "https://${var.aws_region}.console.aws.amazon.com/cloudwatch/home?region=${var.aws_region}#dashboards:name=${aws_cloudwatch_dashboard.main.dashboard_name}"

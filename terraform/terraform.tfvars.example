@@ -5,6 +5,13 @@ desired_count = 2
 cpu           = 256
 memory        = 512
 
+# Autoscaling: the service starts at desired_count, then scales between these
+# bounds on CPU and ALB requests-per-task.
+min_capacity           = 2
+max_capacity           = 6
+cpu_target_utilization = 70
+requests_per_target    = 1000
+
 # Optional: get email alerts when an alarm fires (confirm the SNS subscription).
 # alarm_email = "you@example.com"
 
