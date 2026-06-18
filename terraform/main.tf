@@ -132,9 +132,11 @@ resource "aws_ecs_service" "app" {
   }
 
   # Let CI update the image via a new task-definition revision without Terraform
-  # fighting the deploy.
+  # fighting the deploy. desired_count is owned by Application Auto Scaling once
+  # the scaling target attaches (see autoscaling.tf), so ignore it too — Terraform
+  # only seeds the initial count, autoscaling drives it from there.
   lifecycle {
-    ignore_changes = [task_definition]
+    ignore_changes = [task_definition, desired_count]
   }
 
   depends_on = [aws_lb_listener.http]
